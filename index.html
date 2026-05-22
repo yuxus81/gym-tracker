@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="Gym Tracker"/>
+<meta name="theme-color" content="#0a0a0a"/>
+<title>Gym Tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg: #0a0a0a;
+  --bg2: #141414;
+  --bg3: #1c1c1c;
+  --border: rgba(255,255,255,0.08);
+  --border2: rgba(255,255,255,0.14);
+  --text: #f0f0f0;
+  --muted: #888;
+  --accent: #c8ff00;
+  --accent-dim: rgba(200,255,0,0.12);
+  --accent-text: #0a0a0a;
+  --red: #ff4d4d;
+  --radius: 14px;
+  --radius-sm: 8px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html, body { height: 100%; background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 15px; overflow: hidden; }
+.app { display: flex; flex-direction: column; height: 100dvh; height: 100vh; }
+.nav { display: flex; background: var(--bg2); border-top: 1px solid var(--border); padding: 8px 0 max(8px, env(safe-area-inset-bottom)); order: 2; flex-shrink: 0; }
+.nav-btn { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 6px 4px; background: none; border: none; color: var(--muted); font-family: 'DM Sans', sans-serif; font-size: 10px; cursor: pointer; transition: color 0.15s; }
+.nav-btn svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.nav-btn.active { color: var(--accent); }
+.pages { flex: 1; overflow: hidden; order: 1; }
+.page { display: none; height: 100%; overflow-y: auto; padding-bottom: 1rem; -webkit-overflow-scrolling: touch; }
+.page.active { display: block; }
+.page-header { padding: 1.2rem 1.1rem 0.8rem; display: flex; align-items: flex-end; justify-content: space-between; }
+.page-title { font-family: 'Bebas Neue', sans-serif; font-size: 32px; letter-spacing: 1px; color: var(--text); line-height: 1; }
+.page-sub { font-size: 12px; color: var(--muted); }
+
+.day-card { margin: 0 1rem 8px; background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+.day-tag { display: flex; align-items: center; gap: 10px; padding: 14px 16px 10px; border-bottom: 1px solid var(--border); }
+.day-num { font-family: 'Bebas Neue', sans-serif; font-size: 28px; color: var(--accent); line-height: 1; }
+.day-info { flex: 1; }
+.day-name { font-size: 13px; font-weight: 500; color: var(--text); }
+.day-desc { font-size: 11px; color: var(--muted); margin-top: 1px; }
+.muscle-list { padding: 4px 0; }
+.muscle-item { display: flex; justify-content: space-between; align-items: center; padding: 9px 16px; }
+.muscle-item + .muscle-item { border-top: 1px solid var(--border); }
+.muscle-name { font-size: 13px; color: var(--text); }
+.muscle-vol { font-size: 11px; color: var(--muted); background: var(--bg3); padding: 3px 8px; border-radius: 20px; white-space: nowrap; }
+.day-note { margin: 0 1rem 12px; padding: 7px 12px; background: var(--accent-dim); border-radius: 0 0 var(--radius) var(--radius); font-size: 11px; color: var(--accent); border: 1px solid rgba(200,255,0,0.2); border-top: none; }
+
+.log-top { padding: 0 1rem 0.8rem; }
+.select-row { margin-bottom: 8px; }
+.styled-select { width: 100%; background: var(--bg2); border: 1px solid var(--border2); border-radius: var(--radius-sm); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 14px; padding: 10px 12px; appearance: none; -webkit-appearance: none; }
+.add-row { display: flex; gap: 8px; }
+.styled-input { flex: 1; background: var(--bg2); border: 1px solid var(--border2); border-radius: var(--radius-sm); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 14px; padding: 10px 12px; }
+.styled-input::placeholder { color: var(--muted); }
+.styled-input:focus, .styled-select:focus { outline: none; border-color: var(--accent); }
+.accent-btn { background: var(--accent); color: var(--accent-text); border: none; border-radius: var(--radius-sm); padding: 10px 16px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; white-space: nowrap; }
+.accent-btn:active { opacity: 0.85; }
+.ghost-btn { background: transparent; color: var(--muted); border: 1px solid var(--border2); border-radius: var(--radius-sm); padding: 7px 12px; font-family: 'DM Sans', sans-serif; font-size: 13px; cursor: pointer; }
+.ghost-btn:active { background: var(--bg3); }
+.ex-block { margin: 0 1rem 10px; background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+.ex-head { display: flex; justify-content: space-between; align-items: center; padding: 12px 14px; border-bottom: 1px solid var(--border); }
+.ex-title { font-size: 14px; font-weight: 500; }
+.ex-day-badge { font-size: 11px; color: var(--muted); background: var(--bg3); padding: 3px 8px; border-radius: 20px; }
+.del-btn { background: none; border: none; color: var(--muted); font-size: 20px; cursor: pointer; padding: 0 0 0 8px; line-height: 1; }
+.del-btn:active { color: var(--red); }
+.sets-area { padding: 10px 14px; }
+.set-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.set-label { font-size: 12px; color: var(--muted); min-width: 48px; }
+.set-kg-input { flex: 1; background: var(--bg3); border: 1px solid var(--border2); border-radius: var(--radius-sm); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 500; padding: 8px 10px; text-align: center; }
+.set-kg-input:focus { outline: none; border-color: var(--accent); }
+.set-unit { font-size: 12px; color: var(--muted); min-width: 20px; }
+.remove-set-btn { background: none; border: none; color: var(--muted); font-size: 20px; cursor: pointer; padding: 0; line-height: 1; }
+.remove-set-btn:active { color: var(--red); }
+.add-set-row { padding: 0 14px 12px; display: flex; align-items: center; justify-content: space-between; }
+.pr-tag { font-size: 11px; background: rgba(255,200,0,0.15); color: #ffc800; padding: 2px 8px; border-radius: 20px; margin-left: 6px; }
+.save-bar { margin: 0.8rem 1rem 0; display: flex; align-items: center; gap: 10px; }
+.save-full-btn { flex: 1; background: var(--accent); color: var(--accent-text); border: none; border-radius: var(--radius-sm); padding: 14px; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 500; cursor: pointer; }
+.save-full-btn:active { opacity: 0.85; }
+.saved-flash { font-size: 12px; color: var(--accent); display: none; white-space: nowrap; }
+.empty-state { text-align: center; padding: 3rem 1rem; color: var(--muted); font-size: 14px; }
+.empty-icon { font-size: 40px; margin-bottom: 10px; }
+.hist-block { margin: 0 1rem 10px; background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+.hist-head { display: flex; justify-content: space-between; align-items: center; padding: 12px 14px 8px; }
+.hist-name { font-size: 14px; font-weight: 500; }
+.pr-chip { font-size: 11px; background: rgba(255,200,0,0.15); color: #ffc800; padding: 3px 10px; border-radius: 20px; }
+.hist-session { padding: 8px 14px; border-top: 1px solid var(--border); }
+.hist-date { font-size: 11px; color: var(--muted); margin-bottom: 3px; }
+.hist-sets-str { font-size: 13px; color: var(--text); }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="pages">
+
+    <div id="page-plan" class="page active">
+      <div class="page-header">
+        <span class="page-title">Trainingsplan</span>
+        <span class="page-sub">3 Tage / Woche</span>
+      </div>
+
+      <div class="day-card">
+        <div class="day-tag">
+          <div class="day-num">01</div>
+          <div class="day-info">
+            <div class="day-name">Rücken + Bizeps + Core</div>
+            <div class="day-desc">V-Form & Rückenbreite</div>
+          </div>
+        </div>
+        <div class="muscle-list">
+          <div class="muscle-item"><span class="muscle-name">Rücken</span><span class="muscle-vol">3 Übungen · 3–4 Sätze</span></div>
+          <div class="muscle-item"><span class="muscle-name">Bizeps</span><span class="muscle-vol">2 Übungen · 3 Sätze</span></div>
+          <div class="muscle-item"><span class="muscle-name">Core</span><span class="muscle-vol">2 Übungen · 3 Sätze</span></div>
+        </div>
+      </div>
+      <div class="day-note">~7 Übungen · 60–70 min</div>
+
+      <div class="day-card">
+        <div class="day-tag">
+          <div class="day-num">02</div>
+          <div class="day-info">
+            <div class="day-name">Brust + Trizeps + Schulter</div>
+            <div class="day-desc">Breite Silhouette von vorne</div>
+          </div>
+        </div>
+        <div class="muscle-list">
+          <div class="muscle-item"><span class="muscle-name">Brust</span><span class="muscle-vol">3 Übungen · 3–4 Sätze</span></div>
+          <div class="muscle-item"><span class="muscle-name">Schulter</span><span class="muscle-vol">2 Übungen · 3–4 Sätze</span></div>
+          <div class="muscle-item"><span class="muscle-name">Trizeps</span><span class="muscle-vol">2 Übungen · 3 Sätze</span></div>
+        </div>
+      </div>
+      <div class="day-note">~7 Übungen · 60–70 min</div>
+
+      <div class="day-card">
+        <div class="day-tag">
+          <div class="day-num">03</div>
+          <div class="day-info">
+            <div class="day-name">Beine + hint. Schulter + Core</div>
+            <div class="day-desc">Athletische Basis + Rear Delts</div>
+          </div>
+        </div>
+        <div class="muscle-list">
+          <div class="muscle-item"><span class="muscle-name">Beine</span><span class="muscle-vol">3 Übungen · 3–4 Sätze</span></div>
+          <div class="muscle-item"><span class="muscle-name">Hintere Schulter</span><span class="muscle-vol">2 Übungen · 3–4 Sätze</span></div>
+          <div class="muscle-item"><span class="muscle-name">Core</span><span class="muscle-vol">2 Übungen · 3 Sätze</span></div>
+        </div>
+      </div>
+      <div class="day-note">~7 Übungen · 65–75 min · Bein-Tag mind. 2 Tage vor Fußball</div>
+    </div>
+
+    <div id="page-log" class="page">
+      <div class="page-header">
+        <span class="page-title">Training loggen</span>
+      </div>
+      <div class="log-top">
+        <div class="select-row">
+          <select class="styled-select" id="day-select">
+            <option value="Tag 1">Tag 1 — Rücken & Bizeps</option>
+            <option value="Tag 2">Tag 2 — Brust & Trizeps</option>
+            <option value="Tag 3">Tag 3 — Beine & Schulter</option>
+          </select>
+        </div>
+        <div class="add-row">
+          <input class="styled-input" id="ex-input" type="text" placeholder="z.B. Bankdrücken" autocomplete="off" autocorrect="off"/>
+          <button class="accent-btn" onclick="addExercise()">+ Add</button>
+        </div>
+      </div>
+      <div id="exercises-container">
+        <div class="empty-state"><div class="empty-icon">🏋️</div>Übung hinzufügen und loslegen</div>
+      </div>
+      <div class="save-bar">
+        <span class="saved-flash" id="saved-flash">✓ Gespeichert!</span>
+        <button class="save-full-btn" onclick="saveSession()">Session speichern</button>
+      </div>
+    </div>
+
+    <div id="page-history" class="page">
+      <div class="page-header">
+        <span class="page-title">Verlauf</span>
+      </div>
+      <div id="history-container">
+        <div class="empty-state"><div class="empty-icon">📈</div>Noch keine Sessions gespeichert</div>
+      </div>
+    </div>
+
+  </div>
+
+  <nav class="nav">
+    <button class="nav-btn active" onclick="showPage('plan',this)">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Plan
+    </button>
+    <button class="nav-btn" onclick="showPage('log',this)">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><line x1="3" y1="12" x2="9" y2="12"/><line x1="15" y1="12" x2="21" y2="12"/><line x1="7" y1="7" x2="7" y2="4"/><line x1="17" y1="7" x2="17" y2="4"/><line x1="7" y1="20" x2="7" y2="17"/><line x1="17" y1="20" x2="17" y2="17"/></svg>
+      Loggen
+    </button>
+    <button class="nav-btn" onclick="showPage('history',this)">
+      <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      Verlauf
+    </button>
+  </nav>
+</div>
+
+<script>
+let exercises = [];
+let history = [];
+try { history = JSON.parse(localStorage.getItem('gymHistory') || '[]'); } catch(e) {}
+
+function showPage(p, btn) {
+  document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById('page-' + p).classList.add('active');
+  if (btn) btn.classList.add('active');
+  if (p === 'history') renderHistory();
+}
+
+function addExercise() {
+  const inp = document.getElementById('ex-input');
+  const name = inp.value.trim();
+  if (!name) return;
+  const day = document.getElementById('day-select').value;
+  exercises.push({ id: Date.now(), name, day, sets: [{ kg: '' }] });
+  inp.value = '';
+  renderExercises();
+}
+
+document.getElementById('ex-input').addEventListener('keydown', e => { if (e.key === 'Enter') addExercise(); });
+
+function getBestPR(name) {
+  let best = 0;
+  history.forEach(s => s.exercises.filter(e => e.name === name).forEach(e => {
+    e.sets.forEach(st => { const v = parseFloat(st.kg); if (v > best) best = v; });
+  }));
+  return best || null;
+}
+
+function renderExercises() {
+  const c = document.getElementById('exercises-container');
+  if (!exercises.length) {
+    c.innerHTML = '<div class="empty-state"><div class="empty-icon">🏋️</div>Übung hinzufügen und loslegen</div>';
+    return;
+  }
+  c.innerHTML = exercises.map((ex, ei) => {
+    const pr = getBestPR(ex.name);
+    const maxKg = Math.max(...ex.sets.map(s => parseFloat(s.kg) || 0));
+    const isNewPR = pr && maxKg > pr;
+    const setsHtml = ex.sets.map((s, si) => `
+      <div class="set-row">
+        <span class="set-label">Satz ${si+1}</span>
+        <input class="set-kg-input" type="number" inputmode="decimal" placeholder="—" value="${s.kg}" oninput="updateSet(${ei},${si},this.value)"/>
+        <span class="set-unit">kg</span>
+        ${ex.sets.length > 1 ? `<button class="remove-set-btn" onclick="removeSet(${ei},${si})">×</button>` : '<span style="width:24px"></span>'}
+      </div>`).join('');
+    return `<div class="ex-block">
+      <div class="ex-head">
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px;">
+          <span class="ex-title">${ex.name}</span>
+          ${isNewPR ? '<span class="pr-tag">🏆 PR!</span>' : ''}
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span class="ex-day-badge">${ex.day}</span>
+          <button class="del-btn" onclick="removeExercise(${ei})">×</button>
+        </div>
+      </div>
+      <div class="sets-area">${setsHtml}</div>
+      <div class="add-set-row">
+        <button class="ghost-btn" onclick="addSet(${ei})">+ Satz</button>
+        ${pr ? `<span style="font-size:11px;color:var(--muted)">Best: ${pr} kg</span>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function updateSet(ei, si, val) { exercises[ei].sets[si].kg = val; }
+function addSet(ei) { exercises[ei].sets.push({ kg: '' }); renderExercises(); }
+function removeSet(ei, si) { if (exercises[ei].sets.length > 1) { exercises[ei].sets.splice(si, 1); renderExercises(); } }
+function removeExercise(ei) { exercises.splice(ei, 1); renderExercises(); }
+
+function saveSession() {
+  if (!exercises.length) return;
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('de-DE', { weekday: 'short', day: '2-digit', month: '2-digit', year: '2-digit' });
+  history.unshift({ date: dateStr, day: document.getElementById('day-select').value, exercises: JSON.parse(JSON.stringify(exercises)) });
+  try { localStorage.setItem('gymHistory', JSON.stringify(history)); } catch(e) {}
+  exercises = [];
+  renderExercises();
+  const f = document.getElementById('saved-flash');
+  f.style.display = 'inline';
+  setTimeout(() => f.style.display = 'none', 2000);
+}
+
+function renderHistory() {
+  const c = document.getElementById('history-container');
+  if (!history.length) {
+    c.innerHTML = '<div class="empty-state"><div class="empty-icon">📈</div>Noch keine Sessions gespeichert</div>';
+    return;
+  }
+  const byEx = {};
+  history.forEach(s => s.exercises.forEach(ex => {
+    if (!byEx[ex.name]) byEx[ex.name] = [];
+    byEx[ex.name].push({ date: s.date, day: s.day, sets: ex.sets });
+  }));
+  c.innerHTML = Object.entries(byEx).map(([name, sessions]) => {
+    const allKg = sessions.flatMap(s => s.sets.map(st => parseFloat(st.kg) || 0));
+    const best = Math.max(...allKg);
+    const rows = sessions.slice(0, 6).map(s => {
+      const str = s.sets.filter(st => st.kg).map((st, i) => `S${i+1}:${st.kg}kg`).join(' · ');
+      return `<div class="hist-session"><div class="hist-date">${s.date} · ${s.day}</div><div class="hist-sets-str">${str || '—'}</div></div>`;
+    }).join('');
+    return `<div class="hist-block">
+      <div class="hist-head">
+        <span class="hist-name">${name}</span>
+        ${best > 0 ? `<span class="pr-chip">🏆 ${best} kg</span>` : ''}
+      </div>
+      ${rows}
+    </div>`;
+  }).join('');
+}
+</script>
+</body>
+</html>
