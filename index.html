@@ -8,6 +8,10 @@
 <meta name="apple-mobile-web-app-title" content="YP Gym"/>
 <meta name="theme-color" content="#0d1117"/>
 <title>YP Gym Tracker</title>
+
+<link rel="apple-touch-icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' style='background:%23060913;'><g stroke-linecap='round' stroke-linejoin='round'><path d='M 22 50 L 78 50' stroke='%237eb8f7' stroke-width='4'/><rect x='14' y='40' width='3' height='20' rx='1' fill='%237eb8f7'/><rect x='18' y='35' width='3' height='30' rx='1' fill='%237eb8f7'/><rect x='83' y='40' width='3' height='20' rx='1' fill='%23a78bfa'/><rect x='79' y='35' width='3' height='30' rx='1' fill='%23a78bfa'/><path d='M 32 35 L 45 52 L 45 70 M 45 52 L 28 35' fill='none' stroke='%237eb8f7' stroke-width='4'/><path d='M 55 70 L 55 35 C 70 35, 75 42, 72 52 C 69 60, 60 52, 55 52' fill='none' stroke='%23a78bfa' stroke-width='4'/></g></svg>">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' style='background:%23060913;'><g stroke-linecap='round' stroke-linejoin='round'><path d='M 22 50 L 78 50' stroke='%237eb8f7' stroke-width='4'/><rect x='14' y='40' width='3' height='20' rx='1' fill='%237eb8f7'/><rect x='18' y='35' width='3' height='30' rx='1' fill='%237eb8f7'/><rect x='83' y='40' width='3' height='20' rx='1' fill='%23a78bfa'/><rect x='79' y='35' width='3' height='30' rx='1' fill='%23a78bfa'/><path d='M 32 35 L 45 52 L 45 70 M 45 52 L 28 35' fill='none' stroke='%237eb8f7' stroke-width='4'/><path d='M 55 70 L 55 35 C 70 35, 75 42, 72 52 C 69 60, 60 52, 55 52' fill='none' stroke='%23a78bfa' stroke-width='4'/></g></svg>">
+
 <style>
 :root{
   --bg:#0a0e1a;
@@ -267,7 +271,6 @@ function addEx() {
   if(!name) return;
   const day = currentDay();
   if(!savedExercises[day].includes(name)) { savedExercises[day].push(name); localStorage.setItem('gymSavedExV2', JSON.stringify(savedExercises)); }
-  // Jede Übung hat nun standardmäßig ihre eigene Einheit (unit: 'kg')
   exercises.push({ name, day, unit: 'kg', sets: [{ kg: '', reps: '', type: 'Standard', drops: [] }] });
   document.getElementById('ex-inp').value = '';
   renderExercises();
@@ -371,7 +374,6 @@ function renderHistory() {
     const readableUnitName = dayNamesMapping[s.day] || s.day;
 
     const exRows = s.exercises.map(ex => {
-      // Nutze die bei der Übung individuell gewählte Einheit (Fallback auf kg)
       const exUnit = ex.unit || 'kg';
 
       const setsStr = ex.sets.map((st, i) => {
