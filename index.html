@@ -37,30 +37,28 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 .page{display:none;height:100%;overflow-y:auto;padding:0 1rem 1.5rem;-webkit-overflow-scrolling:touch;}
 .page.active{display:block;}
 
-/* HEADER & LOGO */
+/* LOGO STYLING */
 .app-header{display:flex;align-items:center;gap:14px;padding:1.1rem 0 1rem;}
-.app-logo-container {
+.app-logo-box {
   width: 56px;
   height: 56px;
   border-radius: 14px;
   flex-shrink: 0;
   background: #060913;
   border: 1px solid rgba(126, 184, 247, 0.2);
-  box-shadow: 0 0 20px rgba(126, 184, 247, 0.25), 0 0 8px rgba(167, 139, 250, 0.15);
+  box-shadow: 0 0 15px rgba(126, 184, 247, 0.2);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 4px;
+  padding: 5px;
 }
-.app-logo-svg {
-  width: 100%;
-  height: 100%;
-}
+.app-logo-svg { width: 100%; height: 100%; }
+
 .app-header-title{font-size:26px;font-weight:800;letter-spacing:0.3px;line-height:1;background:linear-gradient(135deg,#7eb8f7 0%,#a78bfa 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
 .app-header-sub{font-size:11px;color:var(--muted);margin-top:3px;}
 .page-title{font-size:26px;font-weight:800;padding:1.1rem 0 0.9rem;background:linear-gradient(135deg,#7eb8f7,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
 
-/* PLAN */
+/* RESTLICHES STYLING */
 .day-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:10px;}
 .day-tag{display:flex;align-items:center;gap:12px;padding:13px 14px 9px;border-bottom:1px solid var(--border);}
 .day-num{font-size:28px;font-weight:800;line-height:1;background:linear-gradient(135deg,#7eb8f7,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
@@ -71,61 +69,25 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 .muscle-nm{font-size:13px;color:var(--text);}
 .muscle-vl{font-size:11px;color:var(--muted);background:var(--bg3);padding:3px 8px;border-radius:20px;}
 .day-note{padding:7px 12px;background:var(--accent-dim);font-size:11px;color:var(--accent);border-top:1px solid rgba(126,184,247,0.12);}
-
-/* INPUTS */
 .g-select{width:100%;background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius-sm);color:var(--text);font-family:var(--font);font-size:14px;padding:11px 12px;appearance:none;-webkit-appearance:none;margin-bottom:10px;}
 .add-row{display:flex;gap:8px;margin-bottom:12px;}
 .g-input{flex:1;background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius-sm);color:var(--text);font-family:var(--font);font-size:14px;padding:11px 12px;}
 .g-input::placeholder{color:var(--muted);}
-.g-input:focus,.g-select:focus{outline:none;border-color:var(--accent);}
 .acc-btn{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#0a0e1a;border:none;border-radius:var(--radius-sm);padding:11px 16px;font-family:var(--font);font-size:14px;font-weight:700;cursor:pointer;white-space:nowrap;}
-.acc-btn:active{opacity:0.82;}
 .ghost-btn{background:transparent;color:var(--muted);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:6px 12px;font-family:var(--font);font-size:13px;cursor:pointer;}
-.ghost-btn:active{background:var(--bg3);}
-
-/* SAVED EX CHIPS */
-.section-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:7px;}
 .saved-ex-list{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;min-height:28px;}
-.saved-ex-chip{display:flex;align-items:center;gap:6px;background:var(--bg2);border:1px solid var(--border2);border-radius:20px;padding:5px 10px 5px 12px;font-size:13px;cursor:pointer;transition:border-color .15s;}
-.saved-ex-chip:hover{border-color:var(--accent);}
-.chip-del{background:none;border:none;color:var(--muted);font-size:16px;cursor:pointer;padding:0;line-height:1;}
-.chip-del:active{color:var(--red);}
-
-/* EX BLOCKS */
+.saved-ex-chip{display:flex;align-items:center;gap:6px;background:var(--bg2);border:1px solid var(--border2);border-radius:20px;padding:5px 10px 5px 12px;font-size:13px;cursor:pointer;}
 .ex-block{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:10px;}
 .ex-head{display:flex;justify-content:space-between;align-items:center;padding:11px 14px;border-bottom:1px solid var(--border);}
 .ex-title{font-size:14px;font-weight:600;}
 .ex-badge{font-size:11px;color:var(--muted);background:var(--bg3);padding:3px 8px;border-radius:20px;}
-.del-btn{background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;padding:0 0 0 8px;}
-.del-btn:active{color:var(--red);}
 .sets-area{padding:10px 14px;}
 .set-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
-.set-lbl{font-size:12px;color:var(--muted);min-width:46px;}
-.set-inp{flex:1;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius-sm);color:var(--text);font-family:var(--font);font-size:15px;font-weight:500;padding:8px 10px;text-align:center;}
-.set-inp:focus{outline:none;border-color:var(--accent);}
-.set-unit{font-size:12px;color:var(--muted);min-width:20px;}
-.rm-set{background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;padding:0;line-height:1;}
-.rm-set:active{color:var(--red);}
-.add-set-row{padding:0 14px 12px;display:flex;align-items:center;justify-content:space-between;}
-.pr-tag{font-size:11px;background:rgba(167,139,250,0.18);color:var(--accent2);padding:2px 8px;border-radius:20px;}
-.save-bar{display:flex;align-items:center;gap:10px;margin-top:12px;}
+.set-inp{flex:1;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius-sm);color:var(--text);font-family:var(--font);font-size:15px;text-align:center;padding:8px;}
 .save-full-btn{flex:1;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#0a0e1a;border:none;border-radius:var(--radius-sm);padding:14px;font-family:var(--font);font-size:15px;font-weight:700;cursor:pointer;}
-.save-full-btn:active{opacity:0.85;}
-.saved-fl{font-size:12px;color:var(--accent);display:none;white-space:nowrap;}
-
-/* HISTORY */
 .hist-session-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:10px;}
 .hist-session-head{display:flex;justify-content:space-between;align-items:center;padding:11px 14px;border-bottom:1px solid var(--border);}
-.hist-session-meta{font-size:12px;color:var(--muted);}
-.hist-session-day{font-size:13px;font-weight:600;}
-.hist-del-btn{background:none;border:none;color:var(--muted);font-size:13px;cursor:pointer;padding:4px 8px;border:1px solid var(--border2);border-radius:var(--radius-sm);font-family:var(--font);}
-.hist-del-btn:active{color:var(--red);border-color:var(--red);}
 .hist-ex-row{padding:8px 14px;border-top:1px solid var(--border);}
-.hist-ex-name{font-size:13px;font-weight:500;margin-bottom:2px;display:flex;justify-content:space-between;}
-.hist-sets-str{font-size:12px;color:var(--muted);}
-.pr-chip{font-size:11px;background:rgba(167,139,250,0.15);color:var(--accent2);padding:2px 8px;border-radius:20px;}
-.empty-st{text-align:center;padding:2.5rem 1rem;color:var(--muted);font-size:14px;}
-.empty-ic{font-size:36px;margin-bottom:8px;}
 </style>
 </head>
 <body>
@@ -134,83 +96,64 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 
     <div id="page-plan" class="page active">
       <div class="app-header">
-        <div class="app-logo-container">
+        <div class="app-logo-box">
           <svg class="app-logo-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
             <defs>
-              <linearGradient id="neonCyan" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#a3e635" stop-opacity="0" /> <stop offset="0%" stop-color="#7eb8f7" />
+              <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#7eb8f7" />
                 <stop offset="100%" stop-color="#93c5fd" />
               </linearGradient>
-              <linearGradient id="neonPurple" x1="0%" y1="0%" x2="100%" y2="100%">
+              <linearGradient id="g2" x1="0%" y1="0%" x2="100%" y2="100%">
                 <stop offset="0%" stop-color="#a78bfa" />
                 <stop offset="100%" stop-color="#c084fc" />
               </linearGradient>
-              <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-                <feGaussianBlur stdDeviation="2" result="blur" />
-                <feMerge>
-                  <feMergeNode in="blur" />
-                  <feMergeNode in="SourceGraphic" />
-                </feMerge>
-              </filter>
             </defs>
-            
-            <polygon points="50,12 83,31 83,69 50,88 17,69 17,31" fill="none" stroke="rgba(126,184,247,0.1)" stroke-width="1"/>
-            
-            <g filter="url(#glow)" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="22" y1="50" x2="78" y2="50" stroke="url(#neonCyan)" stroke-width="3" />
-              
-              <rect x="13" y="47" width="2" height="6" rx="0.5" fill="none" stroke="url(#neonCyan)" stroke-width="1.5" />
-              <rect x="16" y="41" width="2" height="18" rx="1" fill="none" stroke="url(#neonCyan)" stroke-width="1.5" />
-              <rect x="19" y="37" width="2" height="26" rx="1" fill="none" stroke="url(#neonCyan)" stroke-width="1.5" />
-              <rect x="22" y="33" width="2.5" height="34" rx="1" fill="none" stroke="url(#neonCyan)" stroke-width="1.5" />
-              
-              <rect x="85" y="47" width="2" height="6" rx="0.5" fill="none" stroke="url(#neonPurple)" stroke-width="1.5" />
-              <rect x="82" y="41" width="2" height="18" rx="1" fill="none" stroke="url(#neonPurple)" stroke-width="1.5" />
-              <rect x="79" y="37" width="2" height="26" rx="1" fill="none" stroke="url(#neonPurple)" stroke-width="1.5" />
-              <rect x="75.5" y="33" width="2.5" height="34" rx="1" fill="none" stroke="url(#neonPurple)" stroke-width="1.5" />
-
-              <path d="M 31 31 L 46 50 L 46 71 L 40 71 L 40 52 L 25 32 Z" fill="none" stroke="url(#neonCyan)" stroke-width="2.2" />
-              
-              <path d="M 52 71 L 52 31 C 67 31, 74 38, 71 49 C 68 58, 59 52, 52 52" fill="none" stroke="url(#neonPurple)" stroke-width="2.2" />
-            </g>
+            <path d="M 22 50 L 78 50" stroke="url(#g1)" stroke-width="3" stroke-linecap="round"/>
+            <rect x="14" y="40" width="3" height="20" rx="1" fill="url(#g1)"/>
+            <rect x="18" y="35" width="3" height="30" rx="1" fill="url(#g1)"/>
+            <rect x="83" y="40" width="3" height="20" rx="1" fill="url(#g2)"/>
+            <rect x="79" y="35" width="3" height="30" rx="1" fill="url(#g2)"/>
+            <path d="M 32 35 L 45 52 L 45 70 M 45 52 L 28 35" fill="none" stroke="url(#g1)" stroke-width="3" stroke-linecap="round"/>
+            <path d="M 55 70 L 55 35 C 70 35, 75 42, 72 52 C 69 60, 60 52, 55 52" fill="none" stroke="url(#g2)" stroke-width="3" stroke-linecap="round"/>
           </svg>
         </div>
         <div>
           <div class="app-header-title">YP Gym Tracker</div>
-          <div class="app-header-sub">3-Tage Trainingsplan</div>
+          <div class="app-header-sub">3-Tage Split (Optimiert)</div>
         </div>
       </div>
 
       <div class="day-card">
-        <div class="day-tag"><div class="day-num">01</div><div><div class="day-name">Rücken + Bizeps + Core</div><div class="day-desc">V-Form &amp; Rückenbreite aufbauen</div></div></div>
-        <div class="muscle-item"><span class="muscle-nm">Klimmzüge / Latzug</span><span class="muscle-vl">3–4 Sätze</span></div>
+        <div class="day-tag"><div class="day-num">01</div><div><div class="day-name">Pull: Rücken + Bizeps + Core</div><div class="day-desc">Breite Silhouette &amp; stabile Mitte</div></div></div>
+        <div class="muscle-item"><span class="muscle-nm">Klimmzüge / Latzug (Rücken)</span><span class="muscle-vl">3–4 Sätze</span></div>
         <div class="muscle-item"><span class="muscle-nm">Rudern (Kabelzug / Langhantel)</span><span class="muscle-vl">3–4 Sätze</span></div>
-        <div class="muscle-item"><span class="muscle-nm">Rückenstrecker</span><span class="muscle-vl">3 Sätze</span></div>
-        <div class="muscle-item"><span class="muscle-nm">Bizeps Curls</span><span class="muscle-vl">3 Sätze</span></div>
-        <div class="muscle-item"><span class="muscle-nm">Hammer Curls</span><span class="muscle-vl">3 Sätze</span></div>
-        <div class="muscle-item"><span class="muscle-nm">Plank / Crunches</span><span class="muscle-vl">3 Sätze</span></div>
-        <div class="day-note">~6–7 Übungen · 60–70 min</div>
+        <div class="muscle-item"><span class="muscle-nm">Rückenstrecker / Hyperextensions</span><span class="muscle-vl">3 Sätze</span></div>
+        <div class="muscle-item"><span class="muscle-nm">Bizeps Curls (Kurzhantel)</span><span class="muscle-vl">3 Sätze</span></div>
+        <div class="muscle-item"><span class="muscle-nm">Hammer Curls (Unterarm/Bizeps)</span><span class="muscle-vl">3 Sätze</span></div>
+        <div class="muscle-item"><span class="muscle-nm">Plank / Unterarmstütz (Core)</span><span class="muscle-vl">3 Sätze</span></div>
+        <div class="day-note">6 Übungen · Maximaler Fokus auf sauberen Zug</div>
       </div>
 
       <div class="day-card">
-        <div class="day-tag"><div class="day-num">02</div><div><div class="day-name">Brust + Trizeps + Schulter</div><div class="day-desc">Breite Silhouette &amp; Drückkraft</div></div></div>
-        <div class="muscle-item"><span class="muscle-nm">Bankdrücken (Flach / Schräg)</span><span class="muscle-vl">3–4 Sätze</span></div>
-        <div class="muscle-item"><span class="muscle-nm">Kabelzug Flyes / Dips</span><span class="muscle-vl">3 Sätze</span></div>
-        <div class="muscle-item"><span class="muscle-nm">Schulterdrücken (OHP)</span><span class="muscle-vl">3–4 Sätze</span></div>
-        <div class="muscle-item"><span class="muscle-nm">Seitheben</span><span class="muscle-vl">3 Sätze</span></div>
-        <div class="muscle-item"><span class="muscle-nm">Trizeps Pushdowns / Dips</span><span class="muscle-vl">3 Sätze</span></div>
-        <div class="day-note">~6–7 Übungen · 60–70 min</div>
+        <div class="day-tag"><div class="day-num">02</div><div><div class="day-name">Push: Brust + Trizeps + Schulter vorn</div><div class="day-desc">Massives Drück-Volumen</div></div></div>
+        <div class="muscle-item"><span class="muscle-nm">Bankdrücken (Flachbank)</span><span class="muscle-vl">3–4 Sätze</span></div>
+        <div class="muscle-item"><span class="muscle-nm">Schrägbankdrücken mit KH</span><span class="muscle-vl">3 Sätze</span></div>
+        <div class="muscle-item"><span class="muscle-nm">Kabelzug Flyes / Butterfly</span><span class="muscle-vl">3 Sätze</span></div>
+        <div class="muscle-item"><span class="muscle-nm">Schulterdrücken (OHP / Kurzhantel)</span><span class="muscle-vl">3 Sätze</span></div>
+        <div class="muscle-item"><span class="muscle-nm">Trizeps Pushdowns (Kabelzug)</span><span class="muscle-vl">3–4 Sätze</span></div>
+        <div class="muscle-item"><span class="muscle-nm">Overhead Trizeps Extension</span><span class="muscle-vl">3 Sätze</span></div>
+        <div class="day-note">6 Übungen · Schulterdrücken hier schont Tag 3</div>
       </div>
 
       <div class="day-card">
-        <div class="day-tag"><div class="day-num">03</div><div><div class="day-name">Beine + hint. Schulter + Core</div><div class="day-desc">Athletische Basis — mind. 2 Tage vor Fußball</div></div></div>
-        <div class="muscle-item"><span class="muscle-nm">Kniebeugen / Beinpresse</span><span class="muscle-vl">3–4 Sätze</span></div>
-        <div class="muscle-item"><span class="muscle-nm">Romanian Deadlift (RDL)</span><span class="muscle-vl">3 Sätze</span></div>
-        <div class="muscle-item"><span class="muscle-nm">Beinbeuger / Beinstrecker</span><span class="muscle-vl">3 Sätze</span></div>
-        <div class="muscle-item"><span class="muscle-nm">Reverse Flyes / Face Pulls</span><span class="muscle-vl">3–4 Sätze</span></div>
-        <div class="muscle-item"><span class="muscle-nm">Rear Delt Rudern</span><span class="muscle-vl">3 Sätze</span></div>
-        <div class="muscle-item"><span class="muscle-nm">Hanging Leg Raises / Ab Wheel</span><span class="muscle-vl">3 Sätze</span></div>
-        <div class="day-note">~6–7 Übungen · 65–75 min · ⚽ mind. 2 Tage Abstand vor Fußball</div>
+        <div class="day-tag"><div class="day-num">03</div><div><div class="day-name">Beine + Schulter (S/H) + Core</div><div class="day-desc">Knie-Schutz &amp; 3D-Schulter-Look</div></div></div>
+        <div class="muscle-item"><span class="muscle-nm">Kniebeugen / Beinpresse (Beine)</span><span class="muscle-vl">3–4 Sätze</span></div>
+        <div class="muscle-item"><span class="muscle-nm">Romanian Deadlift (Beinrückseite)</span><span class="muscle-vl">3 Sätze</span></div>
+        <div class="muscle-item"><span class="muscle-nm">Beinstrecker (Quadrizeps-Isolierung)</span><span class="muscle-vl">3 Sätze</span></div>
+        <div class="muscle-item"><span class="muscle-nm">Seitheben (seitliche Schulter)</span><span class="muscle-vl">4 Sätze</span></div>
+        <div class="muscle-item"><span class="muscle-nm">Reverse Flyes (hintere Schulter)</span><span class="muscle-vl">3 Sätze</span></div>
+        <div class="muscle-item"><span class="muscle-nm">Beinheben hängend / Crunches (Core)</span><span class="muscle-vl">3 Sätze</span></div>
+        <div class="day-note">6 Übungen · ⚽ Mind. 2 Tage Abstand vor Fußball einhalten!</div>
       </div>
     </div>
 
@@ -218,25 +161,24 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
       <div class="page-title">Loggen</div>
       <select class="g-select" id="day-sel" onchange="onDayChange()">
         <option value="Tag 1">Tag 1 — Rücken + Bizeps + Core</option>
-        <option value="Tag 2">Tag 2 — Brust + Trizeps + Schulter</option>
-        <option value="Tag 3">Tag 3 — Beine + hint. Schulter + Core</option>
+        <option value="Tag 2">Tag 2 — Brust + Trizeps + Schulter vorn</option>
+        <option value="Tag 3">Tag 3 — Beine + Schulter (S/H) + Core</option>
       </select>
       <div class="add-row">
-        <input class="g-input" id="ex-inp" type="text" placeholder="Übung eingeben oder unten wählen" autocomplete="off" autocorrect="off"/>
+        <input class="g-input" id="ex-inp" type="text" placeholder="Übung eingeben oder unten wählen"/>
         <button class="acc-btn" onclick="addEx()">+ Add</button>
       </div>
-      <div class="section-label">Gespeicherte Übungen (dieser Tag)</div>
+      <div class="section-label">Gespeicherte Übungen</div>
       <div class="saved-ex-list" id="saved-ex-list"></div>
-      <div id="ex-cont"><div class="empty-st"><div class="empty-ic">🏋️</div>Übung hinzufügen</div></div>
+      <div id="ex-cont"></div>
       <div class="save-bar">
-        <span class="saved-fl" id="saved-fl">✓ Gespeichert!</span>
         <button class="save-full-btn" onclick="saveSession()">Session speichern</button>
       </div>
     </div>
 
     <div id="page-hist" class="page">
       <div class="page-title">Verlauf</div>
-      <div id="hist-cont"><div class="empty-st"><div class="empty-ic">📈</div>Noch keine Sessions</div></div>
+      <div id="hist-cont"></div>
     </div>
   </div>
 
@@ -257,25 +199,11 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 </div>
 
 <script>
-// ── State ──────────────────────────────────────────────
 let exercises = [];
-let history = [];
-let savedExercises = { "Tag 1": [], "Tag 2": [], "Tag 3": [] };
-
-try { history = JSON.parse(localStorage.getItem('gymHistory') || '[]'); } catch(e) {}
-try {
-  const raw = JSON.parse(localStorage.getItem('gymSavedExV2') || 'null');
-  if (raw && typeof raw === 'object' && !Array.isArray(raw)) {
-    savedExercises = { "Tag 1": raw["Tag 1"] || [], "Tag 2": raw["Tag 2"] || [], "Tag 3": raw["Tag 3"] || [] };
-  } else if (Array.isArray(raw)) {
-    savedExercises["Tag 1"] = raw;
-  }
-} catch(e) {}
+let history = JSON.parse(localStorage.getItem('gymHistory') || '[]');
+let savedExercises = JSON.parse(localStorage.getItem('gymSavedExV2') || '{"Tag 1":[],"Tag 2":[],"Tag 3":[]}');
 
 function currentDay() { return document.getElementById('day-sel').value; }
-function saveSavedEx() { try { localStorage.setItem('gymSavedExV2', JSON.stringify(savedExercises)); } catch(e) {} }
-
-// ── Navigation ─────────────────────────────────────────
 function showPage(p, btn) {
   document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
@@ -284,156 +212,48 @@ function showPage(p, btn) {
   if (p === 'hist') renderHistory();
   if (p === 'log') renderSavedExChips();
 }
-
-function onDayChange() {
-  renderSavedExChips();
-  exercises = [];
-  renderExercises();
-}
-
-// ── Saved exercise chips (per day) ─────────────────────
+function onDayChange() { renderSavedExChips(); exercises = []; renderExercises(); }
 function renderSavedExChips() {
   const day = currentDay();
   const list = savedExercises[day] || [];
   const c = document.getElementById('saved-ex-list');
-  if (!list.length) {
-    c.innerHTML = '<span style="font-size:12px;color:var(--muted)">Noch keine — werden beim Hinzufügen automatisch gespeichert</span>';
-    return;
-  }
-  c.innerHTML = list.map((name, i) => `
-    <div class="saved-ex-chip" onclick="pickSaved('${name.replace(/'/g,"\\'")}')">
-      <span>${name}</span>
-      <button class="chip-del" onclick="event.stopPropagation();delSaved('${day.replace(/'/g,"\\'")}',${i})">×</button>
-    </div>`).join('');
+  c.innerHTML = list.map(name => `<div class="saved-ex-chip" onclick="document.getElementById('ex-inp').value='${name}';addEx()">${name}</div>`).join('');
 }
-
-function pickSaved(name) { document.getElementById('ex-inp').value = name; addEx(); }
-
-function delSaved(day, i) {
-  savedExercises[day].splice(i, 1);
-  saveSavedEx();
-  renderSavedExChips();
-}
-
-function saveName(day, name) {
-  if (!name) return;
-  if (!savedExercises[day]) savedExercises[day] = [];
-  if (savedExercises[day].includes(name)) return;
-  savedExercises[day].push(name);
-  saveSavedEx();
-  renderSavedExChips();
-}
-
-// ── Add / manage exercises ─────────────────────────────
 function addEx() {
-  const inp = document.getElementById('ex-inp');
-  const name = inp.value.trim();
-  if (!name) return;
+  const name = document.getElementById('ex-inp').value.trim();
+  if(!name) return;
   const day = currentDay();
-  saveName(day, name);
-  exercises.push({ id: Date.now(), name, day, sets: [{ kg: '' }] });
-  inp.value = '';
+  if(!savedExercises[day].includes(name)) { savedExercises[day].push(name); localStorage.setItem('gymSavedExV2', JSON.stringify(savedExercises)); }
+  exercises.push({ name, day, sets: [{ kg: '' }] });
+  document.getElementById('ex-inp').value = '';
   renderExercises();
 }
-document.getElementById('ex-inp').addEventListener('keydown', e => { if (e.key === 'Enter') addEx(); });
-
-function getBestPR(name) {
-  let best = 0;
-  history.forEach(s => s.exercises.filter(e => e.name === name).forEach(e => {
-    e.sets.forEach(st => { const v = parseFloat(st.kg); if (v > best) best = v; });
-  }));
-  return best || null;
-}
-
 function renderExercises() {
   const c = document.getElementById('ex-cont');
-  if (!exercises.length) {
-    c.innerHTML = '<div class="empty-st"><div class="empty-ic">🏋️</div>Übung hinzufügen</div>';
-    return;
-  }
-  c.innerHTML = exercises.map((ex, ei) => {
-    const pr = getBestPR(ex.name);
-    const maxKg = Math.max(...ex.sets.map(s => parseFloat(s.kg) || 0));
-    const isNewPR = pr && maxKg > pr;
-    const sHtml = ex.sets.map((s, si) => `
-      <div class="set-row">
-        <span class="set-lbl">Satz ${si+1}</span>
-        <input class="set-inp" type="number" inputmode="decimal" placeholder="—" value="${s.kg}" oninput="updSet(${ei},${si},this.value)"/>
-        <span class="set-unit">kg</span>
-        ${ex.sets.length > 1 ? `<button class="rm-set" onclick="rmSet(${ei},${si})">×</button>` : '<span style="width:22px"></span>'}
-      </div>`).join('');
-    return `<div class="ex-block">
-      <div class="ex-head">
-        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px;">
-          <span class="ex-title">${ex.name}</span>
-          ${isNewPR ? '<span class="pr-tag">🏆 PR!</span>' : ''}
-        </div>
-        <div style="display:flex;align-items:center;gap:6px;">
-          <span class="ex-badge">${ex.day}</span>
-          <button class="del-btn" onclick="rmEx(${ei})">×</button>
-        </div>
+  c.innerHTML = exercises.map((ex, ei) => `
+    <div class="ex-block">
+      <div class="ex-head"><span class="ex-title">${ex.name}</span></div>
+      <div class="sets-area">${ex.sets.map((s, si) => `
+        <div class="set-row">
+          <input class="set-inp" type="number" value="${s.kg}" oninput="exercises[${ei}].sets[${si}].kg=this.value" placeholder="kg">
+        </div>`).join('')}
+        <button class="ghost-btn" onclick="exercises[${ei}].sets.push({kg:''});renderExercises()">+ Satz</button>
       </div>
-      <div class="sets-area">${sHtml}</div>
-      <div class="add-set-row">
-        <button class="ghost-btn" onclick="addSet(${ei})">+ Satz</button>
-        ${pr ? `<span style="font-size:11px;color:var(--muted)">Best: ${pr} kg</span>` : ''}
-      </div>
-    </div>`;
-  }).join('');
+    </div>`).join('');
 }
-
-function updSet(ei, si, v) { exercises[ei].sets[si].kg = v; }
-function addSet(ei) { exercises[ei].sets.push({ kg: '' }); renderExercises(); }
-function rmSet(ei, si) { if (exercises[ei].sets.length > 1) { exercises[ei].sets.splice(si, 1); renderExercises(); } }
-function rmEx(ei) { exercises.splice(ei, 1); renderExercises(); }
-
-// ── Save session ───────────────────────────────────────
 function saveSession() {
-  if (!exercises.length) return;
-  const now = new Date();
-  const ds = now.toLocaleDateString('de-DE', { weekday:'short', day:'2-digit', month:'2-digit', year:'2-digit' });
-  history.unshift({ id: Date.now(), date: ds, day: currentDay(), exercises: JSON.parse(JSON.stringify(exercises)) });
-  try { localStorage.setItem('gymHistory', JSON.stringify(history)); } catch(e) {}
-  exercises = [];
-  renderExercises();
-  const f = document.getElementById('saved-fl');
-  f.style.display = 'inline';
-  setTimeout(() => f.style.display = 'none', 2200);
+  if(!exercises.length) return;
+  history.unshift({ id: Date.now(), date: new Date().toLocaleDateString(), day: currentDay(), exercises: JSON.parse(JSON.stringify(exercises)) });
+  localStorage.setItem('gymHistory', JSON.stringify(history));
+  exercises = []; renderExercises();
 }
-
-// ── History ────────────────────────────────────────────
-function deleteSession(id) {
-  history = history.filter(s => s.id !== id);
-  try { localStorage.setItem('gymHistory', JSON.stringify(history)); } catch(e) {}
-  renderHistory();
-}
-
 function renderHistory() {
   const c = document.getElementById('hist-cont');
-  if (!history.length) { c.innerHTML = '<div class="empty-st"><div class="empty-ic">📈</div>Noch keine Sessions</div>'; return; }
-  c.innerHTML = history.map(s => {
-    const exRows = s.exercises.map(ex => {
-      const str = ex.sets.filter(st => st.kg).map((st, i) => `S${i+1}: ${st.kg}kg`).join(' · ');
-      const best = Math.max(...ex.sets.map(st => parseFloat(st.kg) || 0));
-      return `<div class="hist-ex-row">
-        <div class="hist-ex-name">
-          <span>${ex.name}</span>
-          ${best > 0 ? `<span class="pr-chip">🏆 ${best} kg</span>` : ''}
-        </div>
-        <div class="hist-sets-str">${str || '—'}</div>
-      </div>`;
-    }).join('');
-    return `<div class="hist-session-card">
-      <div class="hist-session-head">
-        <div>
-          <div class="hist-session-day">${s.day}</div>
-          <div class="hist-session-meta">${s.date}</div>
-        </div>
-        <button class="hist-del-btn" onclick="deleteSession(${s.id})">🗑 Löschen</button>
-      </div>
-      ${exRows}
-    </div>`;
-  }).join('');
+  c.innerHTML = history.map(s => `
+    <div class="hist-session-card">
+      <div class="hist-session-head"><b>${s.day}</b> <small>${s.date}</small></div>
+      ${s.exercises.map(ex => `<div class="hist-ex-row">${ex.name}: ${ex.sets.map(st => st.kg+'kg').join(', ')}</div>`).join('')}
+    </div>`).join('');
 }
 </script>
 </body>
