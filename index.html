@@ -49,13 +49,13 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
   height: 56px;
   border-radius: 14px;
   flex-shrink: 0;
-  background: #060913;
-  border: 1px solid rgba(126, 184, 247, 0.2);
-  box-shadow: 0 0 15px rgba(126, 184, 247, 0.2);
+  background: #000000;
+  border: 1px solid rgba(126, 184, 247, 0.25);
+  box-shadow: 0 0 15px rgba(126, 184, 247, 0.15);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 5px;
+  padding: 4px;
 }
 .app-logo-svg { width: 100%; height: 100%; }
 .app-header-title{font-size:26px;font-weight:800;letter-spacing:0.3px;line-height:1;background:linear-gradient(135deg,#7eb8f7 0%,#a78bfa 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
@@ -142,13 +142,16 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
               <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#7eb8f7" /><stop offset="100%" stop-color="#93c5fd" /></linearGradient>
               <linearGradient id="g2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#a78bfa" /><stop offset="100%" stop-color="#c084fc" /></linearGradient>
             </defs>
-            <path d="M 22 50 L 78 50" stroke="url(#g1)" stroke-width="3" stroke-linecap="round"/>
-            <rect x="14" y="40" width="3" height="20" rx="1" fill="url(#g1)"/>
-            <rect x="18" y="35" width="3" height="30" rx="1" fill="url(#g1)"/>
-            <rect x="83" y="40" width="3" height="20" rx="1" fill="url(#g2)"/>
-            <rect x="79" y="35" width="3" height="30" rx="1" fill="url(#g2)"/>
-            <path d="M 32 35 L 45 52 L 45 70 M 45 52 L 28 35" fill="none" stroke="url(#g1)" stroke-width="3" stroke-linecap="round"/>
-            <path d="M 55 70 L 55 35 C 70 35, 75 42, 72 52 C 69 60, 60 52, 55 52" fill="none" stroke="url(#g2)" stroke-width="3" stroke-linecap="round"/>
+            <path d="M 22 50 L 78 50" stroke="url(#g1)" stroke-width="3.5" stroke-linecap="round"/>
+            <rect x="11" y="46" width="2" height="8" rx="0.5" fill="url(#g1)"/>
+            <rect x="14" y="40" width="2.5" height="20" rx="1" fill="url(#g1)"/>
+            <rect x="18" y="35" width="2.5" height="30" rx="1" fill="url(#g1)"/>
+            <rect x="87" y="46" width="2" height="8" rx="0.5" fill="url(#g2)"/>
+            <rect x="83.5" y="40" width="2.5" height="20" rx="1" fill="url(#g2)"/>
+            <rect x="79.5" y="35" width="2.5" height="30" rx="1" fill="url(#g2)"/>
+            <path d="M 24.5 31 L 41.5 50 L 41.5 71" fill="none" stroke="url(#g1)" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M 48.5 37 L 35 24" fill="none" stroke="url(#g1)" stroke-width="4.5" stroke-linecap="round"/>
+            <path d="M 51.5 71 L 51.5 31 C 68 31, 74.5 37.5, 72.5 48 C 70.5 56.5, 60 51.5, 51.5 51.5" fill="none" stroke="url(#g2)" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </div>
         <div>
@@ -221,7 +224,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 </div>
 
 <script>
-// ── State ──────────────────────────────────────────────
+// ── State (Fixierte Keys für Updatesicherheit) ─────────
 let exercises = [];
 let history = JSON.parse(localStorage.getItem('gymHistory') || '[]');
 let savedExercises = JSON.parse(localStorage.getItem('gymSavedExV2') || '{"Tag 1":[],"Tag 2":[],"Tag 3":[]}');
