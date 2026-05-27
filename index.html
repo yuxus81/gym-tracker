@@ -13,6 +13,8 @@
 <link rel="apple-touch-icon" sizes="180x180" href="icon-180.png">
 <link rel="icon" type="image/png" sizes="32x32" href="icon-180.png">
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
 :root{
   --bg:#0a0e1a;
@@ -42,7 +44,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 .page{display:none;height:100%;overflow-y:auto;padding:0 1rem 1.5rem;-webkit-overflow-scrolling:touch;}
 .page.active{display:block;}
 
-/* HEADER & LOGO (Angepasst an echtes PNG-Bild) */
+/* HEADER & LOGO */
 .app-header{display:flex;align-items:center;gap:14px;padding:1.1rem 0 1rem;}
 .app-logo {
   width: 56px;
@@ -55,6 +57,29 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 }
 .app-header-title{font-size:26px;font-weight:800;letter-spacing:0.3px;line-height:1;background:linear-gradient(135deg,#7eb8f7 0%,#a78bfa 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
 .app-header-sub{font-size:11px;color:var(--muted);margin-top:3px;}
+
+/* CLOUD STATUS BAR */
+.cloud-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  margin-bottom: 14px;
+  font-size: 12px;
+}
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #22c55e;
+  display: inline-block;
+  margin-right: 6px;
+}
+.status-dot.syncing { background: #eab308; }
+.status-dot.error { background: #ef4444; }
 
 /* HIST FILTERS */
 .hist-filter-bar{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch;}
@@ -138,6 +163,11 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
         </div>
       </div>
 
+      <div class="cloud-status">
+        <span><span id="status-icon" class="status-dot"></span><span id="status-text">Warte auf Verbindung...</span></span>
+        <button class="ghost-btn" style="padding: 2px 8px; font-size: 11px;" onclick="fetchFromSupabase()">Sync Laden</button>
+      </div>
+
       <div class="day-card">
         <div class="day-tag"><div class="day-num">01</div><div><div class="day-name">Pull: Rücken + Bizeps + Core</div><div class="day-desc">Fokus: Zugkraft &amp; Rumpf</div></div></div>
         <div class="muscle-item"><span class="muscle-nm">Rücken</span><span class="muscle-vl">3 Übungen</span></div>
@@ -202,6 +232,11 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 </div>
 
 <script>
+// ── Supabase Configuration ─────────────────────────────
+const SUPABASE_URL = "https://xlotfogtplbichtqnpyv.supabase.co"; 
+const SUPABASE_ANON_KEY = "sb_publishable_RegLtEiLxxhdPAe0mSXs9w_QNjlu7vK";
+const supabase = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+
 // ── State ──────────────────────────────────────────────
 let exercises = [];
 let history = JSON.parse(localStorage.getItem('gymHistory') || '[]');
@@ -234,6 +269,71 @@ function setHistFilter(filterVal, el) {
   renderHistory();
 }
 
+// ── UI Status Handler ──────────────────────────────────
+function updateStatus(text, type) {
+  const dot = document.getElementById('status-icon');
+  const txt = document.getElementById('status-text');
+  if (!dot || !txt) return;
+  txt.innerText = text;
+  dot.className = "status-dot";
+  if(type === 'syncing') dot.classList.add('syncing');
+  if(type === 'error') dot.classList.add('error');
+}
+
+// ── Supabase Sync Engine ───────────────────────────────
+async function saveToSupabase() {
+  if (!supabase) return;
+  updateStatus("Synchronisiere...", "syncing");
+  try {
+    const { error } = await supabase
+      .from('gym_tracker')
+      .update({ history: history, saved_exercises: savedExercises, updated_at: new Date() })
+      .eq('user_id', 'default_user');
+    
+    if (error) throw error;
+    updateStatus("In Cloud gespeichert", "success");
+  } catch (err) {
+    console.error(err);
+    updateStatus("Sync-Fehler", "error");
+  }
+}
+
+async function fetchFromSupabase() {
+  if (!supabase) {
+    updateStatus("Supabase nicht konfiguriert", "error");
+    return;
+  }
+  updateStatus("Lade Daten...", "syncing");
+  try {
+    const { data, error } = await supabase
+      .from('gym_tracker')
+      .select('history, saved_exercises')
+      .eq('user_id', 'default_user')
+      .single();
+
+    if (error) throw error;
+    
+    if (data) {
+      if(data.history) {
+        history = data.history;
+        localStorage.setItem('gymHistory', JSON.stringify(history));
+      }
+      if(data.saved_exercises) {
+        savedExercises = data.saved_exercises;
+        localStorage.setItem('gymSavedExV2', JSON.stringify(savedExercises));
+      }
+      updateStatus("Cloud-Daten geladen", "success");
+      renderSavedExChips();
+      renderHistory();
+    } else {
+      updateStatus("Keine Cloud-Daten gefunden", "error");
+    }
+  } catch (err) {
+    console.error(err);
+    updateStatus("Fehler beim Laden", "error");
+  }
+}
+
 // ── Saved Exercises Chips ─────────────────────────────
 function renderSavedExChips() {
   const day = currentDay();
@@ -245,14 +345,24 @@ function renderSavedExChips() {
       <button class="chip-del" onclick="event.stopPropagation();delSaved('${day}',${i})">×</button>
     </div>`).join('');
 }
-function delSaved(day, i) { savedExercises[day].splice(i, 1); localStorage.setItem('gymSavedExV2', JSON.stringify(savedExercises)); renderSavedExChips(); }
+
+function delSaved(day, i) { 
+  savedExercises[day].splice(i, 1); 
+  localStorage.setItem('gymSavedExV2', JSON.stringify(savedExercises)); 
+  renderSavedExChips(); 
+  saveToSupabase();
+}
 
 // ── Add / Dynamic Exercise Engine ──────────────────────
 function addEx() {
   const name = document.getElementById('ex-inp').value.trim();
   if(!name) return;
   const day = currentDay();
-  if(!savedExercises[day].includes(name)) { savedExercises[day].push(name); localStorage.setItem('gymSavedExV2', JSON.stringify(savedExercises)); }
+  if(!savedExercises[day].includes(name)) { 
+    savedExercises[day].push(name); 
+    localStorage.setItem('gymSavedExV2', JSON.stringify(savedExercises)); 
+    saveToSupabase();
+  }
   exercises.push({ name, day, unit: 'kg', sets: [{ kg: '', reps: '', type: 'Standard', drops: [] }] });
   document.getElementById('ex-inp').value = '';
   renderExercises();
@@ -343,7 +453,9 @@ function saveSession() {
   localStorage.setItem('gymHistory', JSON.stringify(history));
   exercises = []; 
   renderExercises();
-  alert("Session erfolgreich gespeichert!");
+  renderHistory();
+  alert("Session lokal gespeichert! Synchronisiere mit Cloud...");
+  saveToSupabase();
 }
 
 // ── Verlauf ────────────────────────────────────────────
@@ -384,11 +496,21 @@ function renderHistory() {
           <div class="hist-session-day">${readableUnitName}</div>
           <div class="hist-session-meta">${s.date}</div>
         </div>
-        <button class="hist-del-btn" onclick="if(confirm('Session löschen?')){history=history.filter(h=>h.id!=${s.id});localStorage.setItem('gymHistory',JSON.stringify(history));renderHistory();}">Löschen</button>
+        <button class="hist-del-btn" onclick="if(confirm('Session löschen?')){history=history.filter(h=>h.id!=${s.id});localStorage.setItem('gymHistory',JSON.stringify(history));renderHistory();saveToSupabase();}">Löschen</button>
       </div>
       ${exRows}
     </div>`;
   }).join('');
+}
+
+// Beim Start direkt die Cloud-Daten abfragen
+window.onload = function() {
+  renderSavedExChips();
+  if (supabase) {
+    fetchFromSupabase();
+  } else {
+    updateStatus("Verbindungsfehler (Skript)", "error");
+  }
 }
 </script>
 </body>
