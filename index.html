@@ -88,7 +88,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
   transition: all 0.3s var(--ease-bounce);
 }
 
-/* INTERACTIVE SHAKER CONTAINER */
+/* SHAKER WIDGET */
 .shaker-widget {
   display: flex; align-items: center; justify-content: space-between;
   background: var(--bg2); border: 1px solid var(--border);
@@ -114,7 +114,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 }
 .shaker-cup.shaking { animation: shakeAction 0.5s ease-in-out infinite; }
 
-/* INTERACTIVE MUSCLE HEATMAP INDICATORS */
+/* MUSCLE HEATMAP INDICATORS */
 .heatmap-indicators { display: flex; gap: 6px; margin-bottom: 14px; justify-content: flex-start; }
 .heat-muscle {
   font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 20px; 
@@ -239,11 +239,42 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 }
 .ghost-btn:active { transform: scale(0.95); background: rgba(255,255,255,0.03); }
 
-/* CHIPS */
-.saved-ex-list{display:flex; flex-wrap:wrap; gap:6px; margin-bottom:14px; min-height:28px;}
-.saved-ex-chip{ display:flex; align-items:center; gap:6px; background:var(--bg2); border:1px solid var(--border2); border-radius:20px; padding:5px 10px 5px 12px; font-size:13px; cursor:pointer; }
-.saved-ex-chip:active { transform: scale(0.94); background: var(--bg3); }
-.chip-del{background:none; border:none; color:var(--muted); font-size:16px; cursor:pointer; padding:0; line-height:1;}
+/* REFINED SAVED EXERCISES AREA (PREMIUM RE-DESIGN) */
+.section-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--muted);
+  margin: 14px 0 8px 0;
+  font-weight: 700;
+}
+.saved-ex-list{
+  display:flex; flex-wrap:wrap; gap:8px; margin-bottom:16px; min-height: 28px;
+}
+.saved-ex-chip{
+  display:flex; align-items:center; gap:8px; 
+  background:var(--bg3); border:1px solid rgba(126, 184, 247, 0.12); 
+  border-radius:20px; padding:6px 10px 6px 14px; font-size:12px; font-weight: 500;
+  color: var(--text); cursor:pointer;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  transition: all 0.2s var(--ease-smooth);
+  animation: elementPop 0.25s var(--ease-bounce) forwards;
+}
+.saved-ex-chip:active { 
+  transform: scale(0.95); background: rgba(126, 184, 247, 0.08); border-color: var(--accent); 
+}
+.chip-del{
+  background: rgba(255, 255, 255, 0.04); border:none; color:var(--muted); 
+  font-size:12px; width: 18px; height: 18px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  cursor:pointer; transition: all 0.2s ease; line-height:1;
+}
+.saved-ex-chip:active .chip-del, .chip-del:active {
+  background: rgba(255, 95, 126, 0.16); color: var(--red);
+}
+.empty-chips-hint {
+  font-size: 12px; color: var(--muted); font-style: italic; padding: 4px 0;
+}
 
 /* SETS & POP-IN */
 .ex-head{display:flex; justify-content:space-between; align-items:center; padding:11px 14px; border-bottom:1px solid var(--border);}
@@ -447,7 +478,7 @@ function setHistFilter(filterVal, el) {
   renderHistory();
 }
 
-// ── UX FUNKTIONEN (RPG TEXT, SHAKER, HEATMAP) ───────────
+// ── UX FUNKTIONEN ──────────────────────────────────────
 function spawnFloatingText(txt) {
   const div = document.createElement('div');
   div.className = 'floating-text';
@@ -499,7 +530,6 @@ function updateStreakDisplay() {
   }
   const sd = savedExercises._streak;
   const now = Date.now();
-  // Wenn seit dem letzten Log mehr als 72 Stunden vergangen sind, verfällt der Streak
   if(sd.lastLog && (now - sd.lastLog > 72 * 60 * 60 * 1000)) {
     sd.count = 0;
     localStorage.setItem('gymSavedExV2', JSON.stringify(savedExercises));
@@ -597,6 +627,12 @@ function renderSavedExChips() {
   const list = savedExercises[day];
   const c = document.getElementById('saved-ex-list');
   if(!c) return;
+  
+  if(list.length === 0) {
+    c.innerHTML = `<div class="empty-chips-hint">Hinzugefügte Übungen werden hier gemerkt...</div>`;
+    return;
+  }
+  
   c.innerHTML = list.map((name, i) => `
     <div class="saved-ex-chip" onclick="document.getElementById('ex-inp').value='${name.replace(/'/g,"\\'")}';addEx()">
       <span>${name}</span>
@@ -634,7 +670,6 @@ function addEx() {
 function addDropRow(blockIdx, setIdx, buttonEl) {
   exercises[blockIdx].sets[setIdx].drops.push({ kg: '', reps: '', isNew: true });
   
-  // Wuchtiger Heavy Lift Impact auf dem Block ausführen
   const block = buttonEl.closest('.ex-block');
   if(block) {
     block.classList.add('shake-heavy');
@@ -724,14 +759,12 @@ function saveSession() {
   if(!exercises.length) return;
   const now = Date.now();
   
-  // Streak Berechnung & Update
   if(!savedExercises._streak) savedExercises._streak = { count: 0, lastLog: 0 };
   const sd = savedExercises._streak;
   
   if(!sd.lastLog || (now - sd.lastLog > 72 * 60 * 60 * 1000)) {
     sd.count = 1; 
   } else {
-    // Verhindert mehrfaches Hochzählen am exakt selben Kalendertag (mind. 12h Sperre)
     if(now - sd.lastLog > 12 * 60 * 60 * 1000 || sd.count === 0) {
       sd.count++;
     }
@@ -748,7 +781,6 @@ function saveSession() {
   });
   localStorage.setItem('gymHistory', JSON.stringify(history));
   
-  // Gamification & FX Triggern
   triggerShakerShake();
   if(window.confetti) {
     confetti({ particleCount: 140, spread: 80, origin: { y: 0.6 }, colors: ['#7eb8f7', '#a78bfa', '#22c55e'] });
