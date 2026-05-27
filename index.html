@@ -13,8 +13,6 @@
 <link rel="apple-touch-icon" sizes="180x180" href="icon-180.png">
 <link rel="icon" type="image/png" sizes="32x32" href="icon-180.png">
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <style>
 :root{
   --bg:#0a0e1a;
@@ -163,9 +161,10 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
         </div>
       </div>
 
+      <!-- Cloud Synchronisations-Anzeige -->
       <div class="cloud-status">
-        <span><span id="status-icon" class="status-dot"></span><span id="status-text">Warte auf Verbindung...</span></span>
-        <button class="ghost-btn" style="padding: 2px 8px; font-size: 11px;" onclick="fetchFromSupabase()">Sync Laden</button>
+        <span><span id="status-icon" class="status-dot"></span><span id="status-text">Warte auf Cloud...</span></span>
+        <button class="ghost-btn" style="padding: 2px 8px; font-size: 11px;" onclick="initSupabase()">Sync erzwingen</button>
       </div>
 
       <div class="day-card">
@@ -231,17 +230,24 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
   </nav>
 </div>
 
-<script>
-// ── Supabase Configuration ─────────────────────────────
-const SUPABASE_URL = "https://xlotfogtplbichtqnpyv.supabase.co"; 
-const SUPABASE_ANON_KEY = "sb_publishable_RegLtEiLxxhdPAe0mSXs9w_QNjlu7vK";
-const supabase = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+<!-- Das Skript ans Ende setzen, damit es die UI nicht blockiert -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-// ── State ──────────────────────────────────────────────
+<script>
+// ── Sichere Initialisierung (Verhindert JS Abstürze) ──
 let exercises = [];
-let history = JSON.parse(localStorage.getItem('gymHistory') || '[]');
-let savedExercises = JSON.parse(localStorage.getItem('gymSavedExV2') || '{"Tag 1":[],"Tag 2":[],"Tag 3":[]}');
-let activeHistFilter = 'all';
+let history = [];
+let savedExercises = {"Tag 1":[],"Tag 2":[],"Tag 3":[]};
+
+try {
+  history = JSON.parse(localStorage.getItem('gymHistory') || '[]');
+  const parsedEx = JSON.parse(localStorage.getItem('gymSavedExV2') || 'null');
+  if (parsedEx && typeof parsedEx === 'object' && !Array.isArray(parsedEx)) {
+    savedExercises = parsedEx;
+  }
+} catch(e) {
+  console.warn("Lokal-Speicher Fehler:", e);
+}
 
 const dayNamesMapping = {
   "Tag 1": "Pull: Rücken + Bizeps + Core",
@@ -249,7 +255,12 @@ const dayNamesMapping = {
   "Tag 3": "Legs & Delts: Beine + Schulter + Core"
 };
 
-function currentDay() { return document.getElementById('day-sel').value; }
+let activeHistFilter = 'all';
+
+function currentDay() { 
+  const el = document.getElementById('day-sel');
+  return el ? el.value : "Tag 1"; 
+}
 
 function showPage(p, btn) {
   document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
@@ -260,7 +271,11 @@ function showPage(p, btn) {
   if (p === 'log') renderSavedExChips();
 }
 
-function onDayChange() { renderSavedExChips(); exercises = []; renderExercises(); }
+function onDayChange() { 
+  renderSavedExChips(); 
+  exercises = []; 
+  renderExercises(); 
+}
 
 function setHistFilter(filterVal, el) {
   document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
@@ -280,65 +295,90 @@ function updateStatus(text, type) {
   if(type === 'error') dot.classList.add('error');
 }
 
-// ── Supabase Sync Engine ───────────────────────────────
-async function saveToSupabase() {
-  if (!supabase) return;
-  updateStatus("Synchronisiere...", "syncing");
-  try {
-    const { error } = await supabase
-      .from('gym_tracker')
-      .update({ history: history, saved_exercises: savedExercises, updated_at: new Date() })
-      .eq('user_id', 'default_user');
-    
-    if (error) throw error;
-    updateStatus("In Cloud gespeichert", "success");
-  } catch (err) {
-    console.error(err);
-    updateStatus("Sync-Fehler", "error");
-  }
-}
+// ── Supabase Setup & Logic ─────────────────────────────
+let supabaseClient = null;
+const SUPABASE_URL = "https://xlotfogtplbichtqnpyv.supabase.co"; 
+const SUPABASE_ANON_KEY = "sb_publishable_RegLtEiLxxhdPAe0mSXs9w_QNjlu7vK";
 
-async function fetchFromSupabase() {
-  if (!supabase) {
-    updateStatus("Supabase nicht konfiguriert", "error");
+async function initSupabase() {
+  if (!window.supabase) {
+    updateStatus("Bibliothek blockiert", "error");
     return;
   }
-  updateStatus("Lade Daten...", "syncing");
+  
+  if(!supabaseClient) {
+    supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  }
+  
+  updateStatus("Verbinde...", "syncing");
   try {
-    const { data, error } = await supabase
+    // maybeSingle ist extrem wichtig, damit leere Tabellen nicht zum Skript-Crash führen!
+    const { data, error } = await supabaseClient
       .from('gym_tracker')
       .select('history, saved_exercises')
       .eq('user_id', 'default_user')
-      .single();
+      .maybeSingle();
 
     if (error) throw error;
     
     if (data) {
-      if(data.history) {
-        history = data.history;
-        localStorage.setItem('gymHistory', JSON.stringify(history));
-      }
-      if(data.saved_exercises) {
-        savedExercises = data.saved_exercises;
-        localStorage.setItem('gymSavedExV2', JSON.stringify(savedExercises));
-      }
-      updateStatus("Cloud-Daten geladen", "success");
-      renderSavedExChips();
-      renderHistory();
+      if(data.history) history = data.history;
+      if(data.saved_exercises) savedExercises = data.saved_exercises;
+      
+      localStorage.setItem('gymHistory', JSON.stringify(history));
+      localStorage.setItem('gymSavedExV2', JSON.stringify(savedExercises));
+      updateStatus("Cloud synchronisiert", "success");
     } else {
-      updateStatus("Keine Cloud-Daten gefunden", "error");
+      // Existiert noch nicht? Wir legen die Zeile direkt leise an.
+      await saveToSupabase(true);
     }
+    renderSavedExChips();
+    renderHistory();
   } catch (err) {
-    console.error(err);
-    updateStatus("Fehler beim Laden", "error");
+    console.error("Fetch Fehler:", err);
+    updateStatus("Cloud-Fehler (Backend)", "error");
   }
 }
 
-// ── Saved Exercises Chips ─────────────────────────────
+async function saveToSupabase(isInitialInsert = false) {
+  if (!supabaseClient) return;
+  updateStatus("Speichere Cloud...", "syncing");
+  try {
+    if (isInitialInsert) {
+       const { error } = await supabaseClient.from('gym_tracker').insert([{ 
+          user_id: 'default_user', 
+          history: history, 
+          saved_exercises: savedExercises 
+       }]);
+       if(error) throw error;
+    } else {
+       // Update der bestehenden Zeile
+       const { data, error } = await supabaseClient.from('gym_tracker')
+         .update({ history: history, saved_exercises: savedExercises, updated_at: new Date() })
+         .eq('user_id', 'default_user')
+         .select();
+         
+       if (error) throw error;
+       
+       // Falls aus Versehen gelöscht wurde, lege es neu an
+       if (!data || data.length === 0) {
+          await supabaseClient.from('gym_tracker').insert([{ user_id: 'default_user', history: history, saved_exercises: savedExercises }]);
+       }
+    }
+    updateStatus("In Cloud gespeichert", "success");
+  } catch (err) {
+    console.error("Save Fehler:", err);
+    updateStatus("Sync-Fehler", "error");
+  }
+}
+
+// ── App Funktionen ──────────────────────────────────────
 function renderSavedExChips() {
   const day = currentDay();
-  const list = savedExercises[day] || [];
+  if(!savedExercises[day]) savedExercises[day] = [];
+  const list = savedExercises[day];
   const c = document.getElementById('saved-ex-list');
+  if(!c) return;
   c.innerHTML = list.map((name, i) => `
     <div class="saved-ex-chip" onclick="document.getElementById('ex-inp').value='${name.replace(/'/g,"\\'")}';addEx()">
       <span>${name}</span>
@@ -347,28 +387,31 @@ function renderSavedExChips() {
 }
 
 function delSaved(day, i) { 
-  savedExercises[day].splice(i, 1); 
+  if(savedExercises[day]) savedExercises[day].splice(i, 1); 
   localStorage.setItem('gymSavedExV2', JSON.stringify(savedExercises)); 
   renderSavedExChips(); 
   saveToSupabase();
 }
 
-// ── Add / Dynamic Exercise Engine ──────────────────────
 function addEx() {
-  const name = document.getElementById('ex-inp').value.trim();
+  const inp = document.getElementById('ex-inp');
+  const name = inp.value.trim();
   if(!name) return;
+  
   const day = currentDay();
+  if(!savedExercises[day]) savedExercises[day] = [];
+  
   if(!savedExercises[day].includes(name)) { 
     savedExercises[day].push(name); 
     localStorage.setItem('gymSavedExV2', JSON.stringify(savedExercises)); 
     saveToSupabase();
   }
+  
   exercises.push({ name, day, unit: 'kg', sets: [{ kg: '', reps: '', type: 'Standard', drops: [] }] });
-  document.getElementById('ex-inp').value = '';
+  inp.value = '';
   renderExercises();
 }
 
-// Dropsatz Sub-Logik
 function addDropRow(ei, si) {
   exercises[ei].sets[si].drops.push({ kg: '', reps: '' });
   renderExercises();
@@ -386,6 +429,7 @@ function changeExUnit(ei, val) {
 
 function renderExercises() {
   const c = document.getElementById('ex-cont');
+  if(!c) return;
   if(!exercises.length) { c.innerHTML = ''; return; }
   
   c.innerHTML = exercises.map((ex, ei) => `
@@ -441,7 +485,6 @@ function renderExercises() {
     </div>`).join('');
 }
 
-// ── Session Speichern ──────────────────────────────────
 function saveSession() {
   if(!exercises.length) return;
   history.unshift({
@@ -454,13 +497,13 @@ function saveSession() {
   exercises = []; 
   renderExercises();
   renderHistory();
-  alert("Session lokal gespeichert! Synchronisiere mit Cloud...");
+  alert("Lokal gespeichert! Sync läuft im Hintergrund...");
   saveToSupabase();
 }
 
-// ── Verlauf ────────────────────────────────────────────
 function renderHistory() {
   const c = document.getElementById('hist-cont');
+  if(!c) return;
   const filtered = activeHistFilter === 'all' ? history : history.filter(s => s.day === activeHistFilter);
   
   if(!filtered.length) { c.innerHTML = '<div class="empty-st">Keine Sessions aufgezeichnet</div>'; return; }
@@ -503,15 +546,17 @@ function renderHistory() {
   }).join('');
 }
 
-// Beim Start direkt die Cloud-Daten abfragen
-window.onload = function() {
+// ── Startup ────────────────────────────────────────────
+// Sorgt dafür, dass die UI sofort benutzbar ist, egal wie lang Supabase lädt
+document.addEventListener("DOMContentLoaded", () => {
   renderSavedExChips();
-  if (supabase) {
-    fetchFromSupabase();
-  } else {
-    updateStatus("Verbindungsfehler (Skript)", "error");
-  }
-}
+  
+  // Wir warten minimal, um dem CDN-Skript Zeit zum Laden zu geben
+  setTimeout(() => {
+    initSupabase();
+  }, 500);
+});
+
 </script>
 </body>
 </html>
