@@ -199,7 +199,12 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
   background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius);
   overflow:hidden; margin-bottom:10px; animation: elementPop 0.3s var(--ease-bounce) forwards;
 }
-.ex-block { background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; margin-bottom:10px; }
+
+/* Übungsblöcke: Fix für saubere Squeezing-Animation */
+.ex-block { 
+  background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); 
+  overflow:hidden; margin-bottom:10px; transition: all 0.35s ease;
+}
 
 .page-title{font-size:26px; font-weight:800; padding:1.1rem 0 0.9rem; background:linear-gradient(135deg,#7eb8f7,#a78bfa); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;}
 .day-tag{display:flex; align-items:center; gap:12px; padding:13px 14px 9px; border-bottom:1px solid var(--border);}
@@ -239,14 +244,10 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 }
 .ghost-btn:active { transform: scale(0.95); background: rgba(255,255,255,0.03); }
 
-/* REFINED SAVED EXERCISES AREA (PREMIUM RE-DESIGN) */
+/* SAVED EXERCISES AREA */
 .section-label {
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.8px;
-  color: var(--muted);
-  margin: 14px 0 8px 0;
-  font-weight: 700;
+  font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; color: var(--muted);
+  margin: 14px 0 8px 0; font-weight: 700;
 }
 .saved-ex-list{
   display:flex; flex-wrap:wrap; gap:8px; margin-bottom:16px; min-height: 28px;
@@ -255,26 +256,18 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
   display:flex; align-items:center; gap:8px; 
   background:var(--bg3); border:1px solid rgba(126, 184, 247, 0.12); 
   border-radius:20px; padding:6px 10px 6px 14px; font-size:12px; font-weight: 500;
-  color: var(--text); cursor:pointer;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-  transition: all 0.2s var(--ease-smooth);
-  animation: elementPop 0.25s var(--ease-bounce) forwards;
+  color: var(--text); cursor:pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  transition: all 0.2s var(--ease-smooth); animation: elementPop 0.25s var(--ease-bounce) forwards;
 }
-.saved-ex-chip:active { 
-  transform: scale(0.95); background: rgba(126, 184, 247, 0.08); border-color: var(--accent); 
-}
+.saved-ex-chip:active { transform: scale(0.95); background: rgba(126, 184, 247, 0.08); border-color: var(--accent); }
 .chip-del{
   background: rgba(255, 255, 255, 0.04); border:none; color:var(--muted); 
   font-size:12px; width: 18px; height: 18px; border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
   cursor:pointer; transition: all 0.2s ease; line-height:1;
 }
-.saved-ex-chip:active .chip-del, .chip-del:active {
-  background: rgba(255, 95, 126, 0.16); color: var(--red);
-}
-.empty-chips-hint {
-  font-size: 12px; color: var(--muted); font-style: italic; padding: 4px 0;
-}
+.saved-ex-chip:active .chip-del, .chip-del:active { background: rgba(255, 95, 126, 0.16); color: var(--red); }
+.empty-chips-hint { font-size: 12px; color: var(--muted); font-style: italic; padding: 4px 0; }
 
 /* SETS & POP-IN */
 .ex-head{display:flex; justify-content:space-between; align-items:center; padding:11px 14px; border-bottom:1px solid var(--border);}
@@ -342,10 +335,10 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
       </div>
 
       <div class="day-card">
-        <div class="day-tag"><div class="day-num">01</div><div><div class="day-name">Pull: Rücken + Bizeps + Core</div><div class="day-desc">Fokus: Zugkraft &amp; Rumpf</div></div></div>
+        <div class="day-tag"><div class="day-num">01</div><div><div class="day-name">Pull: Rücken + Bizeps + Bauch</div><div class="day-desc">Fokus: Zugkraft &amp; Rumpf</div></div></div>
         <div class="muscle-item"><span class="muscle-nm">Rücken</span><span class="muscle-vl">3 Übungen</span></div>
         <div class="muscle-item"><span class="muscle-nm">Bizeps</span><span class="muscle-vl">2 Übungen</span></div>
-        <div class="muscle-item"><span class="muscle-nm">Core</span><span class="muscle-vl">1 Übung</span></div>
+        <div class="muscle-item"><span class="muscle-nm">Bauch</span><span class="muscle-vl">1 Übung</span></div>
         <div class="day-note">Rücken verträgt viel Volumen</div>
       </div>
 
@@ -358,10 +351,10 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
       </div>
 
       <div class="day-card">
-        <div class="day-tag"><div class="day-num">03</div><div><div class="day-name">Legs &amp; Delts: Beine + Schulter + Core</div><div class="day-desc">Fokus: Fundament &amp; 3D-Schulter</div></div></div>
+        <div class="day-tag"><div class="day-num">03</div><div><div class="day-name">Legs &amp; Delts: Beine + Schulter + Bauch</div><div class="day-desc">Fokus: Fundament &amp; 3D-Schulter</div></div></div>
         <div class="muscle-item"><span class="muscle-nm">Beine</span><span class="muscle-vl">3 Übungen</span></div>
         <div class="muscle-item"><span class="muscle-nm">Schulter (Seite / Hinten)</span><span class="muscle-vl">2 Übungen</span></div>
-        <div class="muscle-item"><span class="muscle-nm">Core</span><span class="muscle-vl">1 Übung</span></div>
+        <div class="muscle-item"><span class="muscle-nm">Bauch</span><span class="muscle-vl">1 Übung</span></div>
         <div class="day-note">⚽ Mind. 2 Tage Abstand vor Fußball einhalten!</div>
       </div>
     </div>
@@ -384,13 +377,13 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
         <span class="heat-muscle" id="heat-chest">Brust</span>
         <span class="heat-muscle" id="heat-legs">Beine</span>
         <span class="heat-muscle" id="heat-arms">Arme</span>
-        <span class="heat-muscle" id="heat-core">Core</span>
+        <span class="heat-muscle" id="heat-core">Bauch</span>
       </div>
 
       <select class="g-select" id="day-sel" onchange="onDayChange()">
-        <option value="Tag 1">Pull: Rücken + Bizeps + Core</option>
+        <option value="Tag 1">Pull: Rücken + Bizeps + Bauch</option>
         <option value="Tag 2">Push: Brust + Schulter vorn + Trizeps</option>
-        <option value="Tag 3">Legs &amp; Delts: Beine + Schulter + Core</option>
+        <option value="Tag 3">Legs &amp; Delts: Beine + Schulter + Bauch</option>
       </select>
       <div class="add-row">
         <input class="g-input" id="ex-inp" type="text" placeholder="Übung eingeben oder unten wählen"/>
@@ -442,9 +435,9 @@ try {
 }
 
 const dayNamesMapping = {
-  "Tag 1": "Pull: Rücken + Bizeps + Core",
+  "Tag 1": "Pull: Rücken + Bizeps + Bauch",
   "Tag 2": "Push: Brust + Schulter vorn + Trizeps",
-  "Tag 3": "Legs & Delts: Beine + Schulter + Core"
+  "Tag 3": "Legs & Delts: Beine + Schulter + Bauch"
 };
 
 let activeHistFilter = 'all';
@@ -661,7 +654,10 @@ function addEx() {
     saveToSupabase();
   }
   
-  exercises.push({ name, day, unit: 'kg', sets: [{ kg: '', reps: '', type: 'Standard', drops: [], isNew: true }] });
+  // Eindeutige ID generieren für gezieltes und sauberes Löschen mit Animation
+  const uniqueId = 'ex_' + Date.now() + '_' + Math.floor(Math.random()*1000);
+  exercises.push({ id: uniqueId, name, day, unit: 'kg', sets: [{ kg: '', reps: '', type: 'Standard', drops: [], isNew: true }] });
+  
   inp.value = '';
   renderExercises();
   updateShakerProgress();
@@ -691,6 +687,19 @@ function changeExUnit(ei, val) {
   renderExercises();
 }
 
+// Sanftes Löschen eines aktiven Übungsblocks
+function removeExWithAnim(id, btnEl) {
+  const block = btnEl.closest('.ex-block');
+  if(block) {
+    block.classList.add('squeezing');
+    setTimeout(() => {
+      exercises = exercises.filter(ex => ex.id !== id);
+      renderExercises();
+      updateShakerProgress();
+    }, 350);
+  }
+}
+
 function renderExercises() {
   const c = document.getElementById('ex-cont');
   if(!c) return;
@@ -706,7 +715,7 @@ function renderExercises() {
             <option value="lb" ${ex.unit==='lb'?'selected':''}>lb</option>
           </select>
         </div>
-        <button class="ghost-btn" style="color:var(--red);border:none;padding:0;" onclick="exercises.splice(${ei},1);renderExercises();updateShakerProgress();">×</button>
+        <button class="ghost-btn" style="color:var(--red);border:none;padding:0;" onclick="removeExWithAnim('${ex.id}', this)">×</button>
       </div>
       <div class="sets-area">
         ${ex.sets.map((s, si) => {
