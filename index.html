@@ -64,7 +64,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
   animation: pageIn 0.35s var(--ease-smooth) forwards;
 }
 
-/* HEADER & HIGH-PROMINENCE STREAK COUNTDOWN */
+/* HEADER & STREAK COUNTDOWN */
 .app-header{display:flex;align-items:center;gap:14px;padding:1.1rem 0 1rem;}
 .app-logo {
   width: 56px; height: 56px; border-radius: 14px; flex-shrink: 0;
@@ -74,7 +74,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 .app-header-title{font-size:26px;font-weight:800;letter-spacing:0.3px;line-height:1;background:linear-gradient(135deg,#7eb8f7 0%,#a78bfa 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
 .app-header-sub{font-size:11px;color:var(--muted);margin-top:3px;}
 
-/* Stark hervorgehobenes Streak-Design mit Neon-Glow */
 .streak-container {
   display: flex; align-items: center; gap: 8px; margin-left: auto;
   background: rgba(167, 139, 250, 0.15); 
@@ -531,7 +530,7 @@ function updateHeatmap() {
     document.getElementById('heat-arms')?.classList.add('glowing');
     document.getElementById('heat-core')?.classList.add('glowing');
   } else if(day === 'Tag 2') {
-    document.getElementById('heat-chest');?.classList.add('glowing');
+    document.getElementById('heat-chest')?.classList.add('glowing');
     document.getElementById('heat-arms')?.classList.add('glowing');
   } else if(day === 'Tag 3') {
     document.getElementById('heat-legs')?.classList.add('glowing');
