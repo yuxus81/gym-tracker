@@ -31,7 +31,6 @@
   --radius-sm:8px;
   --font:-apple-system,BlinkMacSystemFont,'Segoe UI','Helvetica Neue',Arial,sans-serif;
   
-  /* UX Animations-Kurve (Apple-like Snappy Ease-Out) */
   --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
   --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -40,7 +39,7 @@
 html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--font);font-size:15px;overflow:hidden;}
 .app{display:flex;flex-direction:column;height:100dvh;height:100vh;}
 
-/* NAVIGATION & MICRO-INTERACTIONS */
+/* NAVIGATION */
 .nav{display:flex;background:var(--bg2);border-top:1px solid var(--border);padding:8px 0 max(8px,env(safe-area-inset-bottom));order:2;flex-shrink:0;}
 .nav-btn{
   flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 4px;
@@ -56,7 +55,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 .pages{flex:1;overflow:hidden;order:1;}
 .page{display:none;height:100%;overflow-y:auto;padding:0 1rem 1.5rem;-webkit-overflow-scrolling:touch;}
 
-/* Optimierte Page-Transition (Fade + Slide-Up) */
 @keyframes pageIn {
   from { opacity: 0; transform: translateY(12px); }
   to { opacity: 1; transform: translateY(0); }
@@ -80,7 +78,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 .app-header-title{font-size:26px;font-weight:800;letter-spacing:0.3px;line-height:1;background:linear-gradient(135deg,#7eb8f7 0%,#a78bfa 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
 .app-header-sub{font-size:11px;color:var(--muted);margin-top:3px;}
 
-/* CLOUD STATUS BAR & PULSE ANIMATION */
+/* CLOUD STATUS BAR */
 .cloud-status {
   display: flex;
   align-items: center;
@@ -127,10 +125,16 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
   from { opacity: 0; transform: scale(0.96) translateY(4px); }
   to { opacity: 1; transform: scale(1) translateY(0); }
 }
-.day-card, .ex-block, .hist-session-card {
+.day-card, .hist-session-card {
   background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);
   overflow:hidden;margin-bottom:10px;
   animation: elementPop 0.3s var(--ease-bounce) forwards;
+}
+
+/* Übungsblock bleibt starr um Springen bei neuen Sätzen zu verhindern */
+.ex-block {
+  background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);
+  overflow:hidden;margin-bottom:10px;
 }
 
 .page-title{font-size:26px;font-weight:800;padding:1.1rem 0 0.9rem;background:linear-gradient(135deg,#7eb8f7,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
@@ -144,7 +148,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 .muscle-vl{font-size:11px;color:var(--muted);background:var(--bg3);padding:3px 8px;border-radius:20px;}
 .day-note{padding:7px 12px;background:var(--accent-dim);font-size:11px;color:var(--accent);border-top:1px solid rgba(126,184,247,0.12);}
 
-/* INPUTS & GLOW FOCUS */
+/* INPUTS */
 .g-select, .g-input {
   width:100%;background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius-sm);
   color:var(--text);font-family:var(--font);font-size:14px;padding:11px 12px;appearance:none;-webkit-appearance:none;
@@ -160,7 +164,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 
 .add-row{display:flex;gap:8px;margin-bottom:12px;}
 
-/* BUTTON ANIMATIONS */
+/* BUTTONS */
 .acc-btn, .save-full-btn {
   background:linear-gradient(135deg,var(--accent),var(--accent2));color:#0a0e1a;
   border:none;border-radius:var(--radius-sm);font-family:var(--font);font-weight:700;
@@ -178,30 +182,32 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 }
 .ghost-btn:active { transform: scale(0.95); background: rgba(255,255,255,0.03); }
 
-/* SAVED CHIPS WITH REVEAL */
+/* CHIPS */
 .saved-ex-list{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;min-height:28px;}
 .saved-ex-chip{
   display:flex;align-items:center;gap:6px;background:var(--bg2);border:1px solid var(--border2);
   border-radius:20px;padding:5px 10px 5px 12px;font-size:13px;cursor:pointer;
   transition: all 0.2s var(--ease-smooth);
-  animation: elementPop 0.25s var(--ease-bounce) forwards;
 }
 .saved-ex-chip:active { transform: scale(0.94); background: var(--bg3); }
 .chip-del{background:none;border:none;color:var(--muted);font-size:16px;cursor:pointer;padding:0;line-height:1;transition: color 0.2s;}
 .chip-del:hover { color: var(--red); }
 
-/* EX BLOCKS & SETS Engine */
+/* SETS & TARGETED POP-IN ANIMATION */
 .ex-head{display:flex;justify-content:space-between;align-items:center;padding:11px 14px;border-bottom:1px solid var(--border);}
 .ex-title-container{display:flex;align-items:center;gap:8px;}
 .ex-title{font-size:14px;font-weight:600;}
 .ex-unit-select{background:var(--bg3);border:1px solid var(--border2);border-radius:12px;color:var(--text);font-size:11px;padding:2px 6px;cursor:pointer;}
 .sets-area{padding:10px 14px;}
 
-/* Smooth Set Entry */
 .set-wrapper{
   background:rgba(255,255,255,0.01);border-radius:var(--radius-sm);margin-bottom:6px;padding:4px 0;
+}
+/* Nur das wirklich neue Element popt auf */
+.set-wrapper.pop-in, .drop-row.pop-in {
   animation: elementPop 0.2s var(--ease-smooth) forwards;
 }
+
 .set-row{display:flex;align-items:center;gap:6px;padding:2px 0;}
 .set-lbl{font-size:12px;color:var(--muted);min-width:44px;}
 .set-inp{
@@ -217,7 +223,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 
 /* DROPSATZ SUB ROWS */
 .drop-rows-container{margin-left:44px;border-left:2px dashed var(--accent2);padding-left:8px;margin-top:4px;display:flex;flex-direction:column;gap:4px;}
-.drop-row{display:flex;align-items:center;gap:4px;animation: elementPop 0.2s var(--ease-smooth) forwards;}
+.drop-row{display:flex;align-items:center;gap:4px;}
 .drop-lbl{font-size:11px;color:var(--accent2);min-width:35px;}
 .drop-btn-mini{
   background:none;color:var(--accent2);font-size:11px;padding:2px 6px;border-radius:10px;
@@ -489,13 +495,13 @@ function addEx() {
     saveToSupabase();
   }
   
-  exercises.push({ name, day, unit: 'kg', sets: [{ kg: '', reps: '', type: 'Standard', drops: [] }] });
+  exercises.push({ name, day, unit: 'kg', sets: [{ kg: '', reps: '', type: 'Standard', drops: [], isNew: true }] });
   inp.value = '';
   renderExercises();
 }
 
 function addDropRow(ei, si) {
-  exercises[ei].sets[si].drops.push({ kg: '', reps: '' });
+  exercises[ei].sets[si].drops.push({ kg: '', reps: '', isNew: true });
   renderExercises();
 }
 
@@ -532,7 +538,7 @@ function renderExercises() {
           if(s.type === 'Dropsatz') {
             dropRowsHtml = `<div class="drop-rows-container">` + 
               s.drops.map((dr, di) => `
-                <div class="drop-row">
+                <div class="drop-row ${dr.isNew ? 'pop-in' : ''}">
                   <span class="drop-lbl">Drop ${di+1}</span>
                   <input class="set-inp" type="number" placeholder="${ex.unit}" value="${dr.kg}" oninput="exercises[${ei}].sets[${si}].drops[${di}].kg=this.value">
                   <span class="set-unit">${ex.unit}</span>
@@ -544,7 +550,7 @@ function renderExercises() {
           }
 
           return `
-          <div class="set-wrapper">
+          <div class="set-wrapper ${s.isNew ? 'pop-in' : ''}">
             <div class="set-row">
               <span class="set-lbl">Satz ${si+1}</span>
               <input class="set-inp" type="number" placeholder="${ex.unit}" value="${s.kg}" oninput="exercises[${ei}].sets[${si}].kg=this.value">
@@ -555,16 +561,24 @@ function renderExercises() {
                 <option value="Standard" ${s.type==='Standard'?'selected':''}>Standard</option>
                 <option value="Warm-up" ${s.type==='Warm-up'?'selected':''}>Warm-up</option>
                 <option value="Dropsatz" ${s.type==='Dropsatz'?'selected':''}>Dropsatz</option>
-                <option value="Fail" ${s.type==='Fail'?'selected':''}>Fail</option>
               </select>
               <button class="rm-set" onclick="if(exercises[${ei}].sets.length>1){exercises[${ei}].sets.splice(${si},1);renderExercises()}">×</button>
             </div>
             ${dropRowsHtml}
           </div>`;
         }).join('')}
-        <button class="ghost-btn" style="margin-top:6px;" onclick="exercises[${ei}].sets.push({kg:'',reps:'',type:'Standard',drops:[]});renderExercises()">+ Satz</button>
+        <button class="ghost-btn" style="margin-top:6px;" onclick="exercises[${ei}].sets.push({kg:'',reps:'',type:'Standard',drops:[],isNew:true});renderExercises()">+ Satz</button>
       </div>
     </div>`).join('');
+
+  // WICHTIG: Nach dem Einfügen ins DOM setzen wir alle Flags direkt wieder zurück,
+  // damit bei zukünftigen Renders (z.B. Typenwechsel) nichts Altes erneut aufblinkt.
+  exercises.forEach(ex => {
+    ex.sets.forEach(s => {
+      s.isNew = false;
+      if(s.drops) s.drops.forEach(dr => dr.isNew = false);
+    });
+  });
 }
 
 function saveSession() {
