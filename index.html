@@ -27,6 +27,7 @@
   --accent-dim:rgba(126,184,247,0.08);
   --accent-text:#0a0e1a;
   --red:#ff5f7e;
+  --orange:#ff8c00;
   --radius:14px;
   --radius-sm:8px;
   --font:-apple-system,BlinkMacSystemFont,'Segoe UI','Helvetica Neue',Arial,sans-serif;
@@ -64,7 +65,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
   animation: pageIn 0.35s var(--ease-smooth) forwards;
 }
 
-/* HEADER & STREAK COUNTDOWN */
+/* HEADER & HIGH-PROMINENCE STREAK COUNTDOWN */
 .app-header{display:flex;align-items:center;gap:14px;padding:1.1rem 0 1rem;}
 .app-logo {
   width: 56px; height: 56px; border-radius: 14px; flex-shrink: 0;
@@ -595,7 +596,7 @@ function updateStatus(text, type) {
   if(type === 'error') dot.classList.add('error');
 }
 
-// ── SUPABASE CONFIGURATION ─────────────────────────────
+// ── SUPABASE CONFIGURATION & SMART MERGE ─────────────────
 let supabaseClient = null;
 const SUPABASE_URL = "https://xlotfogtplbichtqnpyv.supabase.co"; 
 const SUPABASE_ANON_KEY = "sb_publishable_RegLtEiLxxhdPAe0mSXs9w_QNjlu7vK";
@@ -619,12 +620,42 @@ async function initSupabase() {
     if (error) throw error;
     
     if (data) {
-      if(data.history) history = data.history;
-      if(data.saved_exercises) savedExercises = data.saved_exercises;
+      // SMART MERGE: Niemals wieder lokale Daten blind überschreiben!
+      let cloudHistory = data.history || [];
+      let localHistory = JSON.parse(localStorage.getItem('gymHistory') || '[]');
       
+      let mergedMap = new Map();
+      // Cloud zuerst einfügen
+      cloudHistory.forEach(h => mergedMap.set(h.id, h));
+      // Lokal danach einfügen (lokal überschreibt/ergänzt Cloud, da es potenziell aktueller ist)
+      localHistory.forEach(h => mergedMap.set(h.id, h));
+      
+      // Zurück ins Array und nach ID (Zeitstempel) absteigend sortieren
+      history = Array.from(mergedMap.values()).sort((a, b) => b.id - a.id);
+      
+      // Saved Exercises mergen (Duplikate entfernen)
+      let cloudSaved = data.saved_exercises || {"Tag 1":[],"Tag 2":[],"Tag 3":[]};
+      let localSaved = JSON.parse(localStorage.getItem('gymSavedExV2') || '{"Tag 1":[],"Tag 2":[],"Tag 3":[]}');
+      
+      savedExercises = {"Tag 1":[],"Tag 2":[],"Tag 3":[]};
+      ["Tag 1", "Tag 2", "Tag 3"].forEach(tag => {
+        let set = new Set([...(cloudSaved[tag] || []), ...(localSaved[tag] || [])]);
+        savedExercises[tag] = Array.from(set);
+      });
+      
+      // Streak mergen (den mit dem neueren Zeitstempel priorisieren)
+      let cloudStreak = cloudSaved._streak || { count: 0, lastLog: 0 };
+      let localStreak = localSaved._streak || { count: 0, lastLog: 0 };
+      savedExercises._streak = (localStreak.lastLog > cloudStreak.lastLog) ? localStreak : cloudStreak;
+
+      // Die gemergten, sicheren Daten wieder lokal abspeichern
       localStorage.setItem('gymHistory', JSON.stringify(history));
       localStorage.setItem('gymSavedExV2', JSON.stringify(savedExercises));
+      
       updateStatus("Cloud synchronisiert", "success");
+      
+      // Den gesammelten Stand direkt einmal in die Cloud hochschießen, um beide Seiten gleichzuziehen
+      saveToSupabase();
     } else {
       await saveToSupabase(true);
     }
